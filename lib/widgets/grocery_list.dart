@@ -25,15 +25,26 @@ class _GroceryListState extends State<GroceryList> {
   }
 
   void _loadItems() async {
-    final url = Uri.https(
+
+    try {
+      final url = Uri.https(
         'shop-app-1348d-default-rtdb.asia-southeast1.firebasedatabase.app',
         'shopping-list.json');
     final response = await http.get(url);
+
     if (response.statusCode >= 400) {
       setState(() {
         _error = 'Failed to fetch data. Try again later';
       });
     }
+
+    if (response.body == 'null') {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
     final Map<String, dynamic> listData = json.decode(response.body);
     final List<GroceryItem> loadedItems = [];
     for (final item in listData.entries) {
@@ -53,6 +64,13 @@ class _GroceryListState extends State<GroceryList> {
       _groceryItems = loadedItems;
       _isLoading = false;
     });
+      
+    } catch (e) {
+       setState(() {
+        _error = 'Something went wrong. Try again later';
+      });
+    }
+    
   }
 
   void _addItem() async {
