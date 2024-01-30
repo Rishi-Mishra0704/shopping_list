@@ -13,7 +13,7 @@ class NewItem extends StatefulWidget {
 class _NewItemState extends State<NewItem> {
   final _formkey = GlobalKey<FormState>();
 
-  void _saveItem(){
+  void _saveItem() {
     _formkey.currentState!.validate();
   }
 
@@ -101,7 +101,9 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _formkey.currentState!.reset();
+                    },
                     child: const Text('Reset'),
                   ),
                   ElevatedButton(
